@@ -337,6 +337,27 @@
                                         </div>
                                     </div>
 
+                                    @php
+                                        // Determine display price
+                                        $currencyId = $shipment->currency_id;
+                                        if (!$currencyId) {
+                                            $usd = App\Models\currencies::where('currency', 'USD')->first();
+                                            $currencyId = $usd ? $usd->id : 1;
+                                        }
+
+                                        if ($item->price !== null && (float)$item->price > 0) {
+                                            $displayPrice = $currencyService->convertUsdToCurrency((float)$item->price, $currencyId);
+                                        } else {
+                                            $displayPrice = $currencyService->calculateShippingCost((float)$item->weight, $shipment->sh_type, $shipment->from, $shipment->to, $currencyId);
+                                        }
+                                    @endphp
+                                    <div class="text-end ms-2" style="width: 130px;">
+                                        <div class="input-group input-group-sm bg-soft-secondary rounded px-2 py-1">
+                                            <input type="number" name="price" class="form-control text-center p-0 border-0 bg-transparent fw-bold text-success" value="{{ round($displayPrice, 2) }}" step="0.01" min="0" required>
+                                            <span class="input-group-text border-0 bg-transparent p-0 small text-muted ms-1">{{ $shipment->orderCurrency->currency ?? 'USD' }}</span>
+                                        </div>
+                                    </div>
+
                                     <div class="ms-3 d-flex align-items-center justify-content-between">
                                         <button type="submit" class="btn btn-link btn-sm p-0  mx-2">
                                             <i class="bi bi-pencil-fill f20 text-primary"></i>

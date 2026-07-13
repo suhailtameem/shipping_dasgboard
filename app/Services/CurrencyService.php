@@ -70,23 +70,27 @@ class CurrencyService
     {
         $totalUsd = 0.0;
         foreach ($packages as $package) {
-            $rate = ShippingRate::where('shtype', $shippingType)
-                ->where('from', $from)
-                ->where('to', $to)
-                ->where('weight_from', '<=', $package->weight)
-                ->where('Weight_to', '>=', $package->weight)
-                ->first();
-
-            if (!$rate) {
+            if ($package->price !== null && (float) $package->price > 0) {
+                $totalUsd += (float) $package->price;
+            } else {
                 $rate = ShippingRate::where('shtype', $shippingType)
                     ->where('from', $from)
                     ->where('to', $to)
-                    ->orderBy('Weight_to', 'desc')
+                    ->where('weight_from', '<=', $package->weight)
+                    ->where('Weight_to', '>=', $package->weight)
                     ->first();
-            }
 
-            $usdPricePerUnit = $rate ? (float) $rate->price : 0.0;
-            $totalUsd += ($package->weight * $usdPricePerUnit);
+                if (!$rate) {
+                    $rate = ShippingRate::where('shtype', $shippingType)
+                        ->where('from', $from)
+                        ->where('to', $to)
+                        ->orderBy('Weight_to', 'desc')
+                        ->first();
+                }
+
+                $usdPricePerUnit = $rate ? (float) $rate->price : 0.0;
+                $totalUsd += ($package->weight * $usdPricePerUnit);
+            }
         }
 
         return $this->convertUsdToCurrency($totalUsd, $orderCurrencyId);

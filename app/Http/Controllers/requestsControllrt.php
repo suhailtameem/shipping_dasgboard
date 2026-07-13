@@ -573,10 +573,21 @@ class requestsControllrt extends Controller
     public function updateContentRow(Request $request)
     {
         $RID = $request->input('rid');
+        $shipment = ShippingRequest::findOrFail($RID);
+        $currencyId = $shipment->currency_id;
+        if (!$currencyId) {
+            $usd = Currency::where('currency', 'USD')->first();
+            $currencyId = $usd ? $usd->id : 1;
+        }
+
+        $submittedPrice = (float) $request->input('price');
+        $priceInUsd = $this->currencyService->convertCurrencyToUsd($submittedPrice, $currencyId);
+
         $update = packages::whereId($request->rowID)->update([
             'name' => $request->input('name'),
             'ptype' => $request->input('type'),
             'weight' => $request->input('weight'),
+            'price' => $priceInUsd,
         ]);
 
         //update total weight and total price
@@ -654,7 +665,9 @@ class requestsControllrt extends Controller
         $currencyId = $shippingRequest->currency_id;
         if (!$currencyId) {
             $usd = Currency::where('currency', 'USD')->first();
-            $currencyId = $usd ? $usd->id : null;
+            $currencyId = $usd ? (int) $usd->id : 1;
+        } else {
+            $currencyId = (int) $currencyId;
         }
 
         // Calculate total price in the order's specific currency ID
@@ -796,6 +809,7 @@ class requestsControllrt extends Controller
             // Shipment Services (containers & additional services)
             'shipmentServices'  => $shipment->shipmentServices,
             'allSubLists'       => subList::with('parentList')->orderBy('list_id')->get(),
+            'currencyService'   => $this->currencyService,
             'company'       => Company::first() ?? (object)[
                 'name_en' => 'Shipping Co.', 
                 'name_ar' => 'شركة الشحن', 
