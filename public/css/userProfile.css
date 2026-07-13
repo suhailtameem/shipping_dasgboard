@@ -1,0 +1,29 @@
+.profileStamp{
+    display: flex;
+    align-items: center;
+}
+.profileStamp:hover{
+    cursor: pointer;
+}
+.profileImg{
+    width: 120px;
+    height: 120px;
+    background: #505760;
+    border-radius: 12px;
+}
+.userName{
+    font-size: 20px;
+    margin-top: 14px;
+}
+.sec-title {
+    font-size: 16px;
+    color: #8c8c8c;
+
+}
+.form-control-theme{
+    /* background: #e1e1e1; */
+    color: #626262;
+    /* border: none; */
+}
+
+

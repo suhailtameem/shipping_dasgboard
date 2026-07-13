@@ -1,0 +1,405 @@
+/* ================================================
+   Awesome Create Shipping Request Design - Dark Theme
+   ================================================ */
+
+:root {
+    --ios-bg: #1c1c1e;
+    --ios-card-bg: #292D30;
+    --ios-card-bg-alt: #35393c;
+    --ios-text: #ffffff;
+    --ios-text-secondary: #a1a1aa;
+    --ios-blue: #0a84ff;
+    --ios-red: #ff453a;
+    --ios-green: #30d158;
+    --ios-warning: #ffd60a;
+    --ios-separator: #3a3a3c;
+    --card-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    --card-shadow-hover: 0 20px 60px rgba(0,0,0,0.4);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+body{
+    padding-top: 4rem;
+}
+
+/* ================================================
+   Step Card Design
+   ================================================ */
+
+.step-card {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-smooth);
+    border: none;
+}
+
+.step-card:hover {
+    box-shadow: var(--card-shadow-hover);
+}
+
+.ios-group-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px !important;
+    font-size: 16px;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+}
+
+.ios-group-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 100%);
+}
+
+.step-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 16px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* ================================================
+   Shipping Type Cards
+   ================================================ */
+
+.shipping-type-card {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+}
+
+.shipping-type-inner {
+    background: linear-gradient(145deg, #2e3235 0%, #292D30 100%);
+    border: 3px solid #3a3a3c;
+    border-radius: 20px;
+    padding: 28px 20px;
+    text-align: center;
+    position: relative;
+    transition: var(--transition-smooth);
+    overflow: hidden;
+}
+
+.shipping-type-inner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--ios-blue);
+    opacity: 0;
+    transition: var(--transition-smooth);
+}
+
+.shipping-type-radio:checked + .shipping-type-inner {
+    border-color: var(--ios-blue);
+    background: linear-gradient(145deg, #363b3e 0%, #2e3235 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(10, 132, 255, 0.3);
+}
+
+.shipping-type-radio:checked + .shipping-type-inner::before {
+    opacity: 0.15;
+}
+
+.shipping-type-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.shipping-type-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+}
+
+.shipping-type-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ios-text);
+    position: relative;
+    z-index: 1;
+}
+
+.check-indicator {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 28px;
+    color: var(--ios-blue);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: var(--transition-smooth);
+}
+
+.shipping-type-radio:checked + .shipping-type-inner .check-indicator,
+.container-type-checkbox:checked + .container-type-inner .check-indicator,
+.service-type-checkbox:checked + .service-type-inner .check-indicator,
+.sub-list-checkbox:checked + .sub-list-inner .check-indicator {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ================================================
+   Destinations Section
+   ================================================ */
+
+.destinations-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 13px;
+    flex-wrap: wrap;
+}
+
+.destination-card {
+    flex: 1;
+    
+    width: 100%;
+}
+
+.dest-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ios-text-secondary);
+    margin-bottom: 10px;
+}
+
+.destination-arrow {
+    font-size: 32px;
+    color: var(--ios-text-secondary);
+    flex-shrink: 0;
+    animation: pulse-arrow 2s infinite;
+}
+
+@keyframes pulse-arrow {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(6px); }
+}
+
+.destinations-wrapper .form-select {
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid #3a3a3c;
+    border-radius: 16px;
+    background: var(--ios-card-bg);
+    color: var(--ios-text);
+    transition: var(--transition-smooth);
+}
+
+.destinations-wrapper .form-select:focus {
+    border-color: var(--ios-blue);
+    box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.2);
+}
+
+/* ================================================
+   Container Type Cards
+   ================================================ */
+
+.container-type-card,
+.service-type-card {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+}
+
+.container-type-inner,
+.service-type-inner {
+    background: linear-gradient(145deg, #2e3235 0%, #292D30 100%);
+    border: 3px solid #3a3a3c;
+    border-radius: 18px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    transition: var(--transition-smooth);
+}
+
+.container-type-checkbox:checked + .container-type-inner,
+.service-type-checkbox:checked + .service-type-inner {
+    border-color: var(--ios-green);
+    background: linear-gradient(145deg, #363b3e 0%, #2e3235 100%);
+    transform: translateX(4px);
+    box-shadow: 0 10px 30px rgba(48, 209, 88, 0.3);
+}
+
+.container-type-icon,
+.service-type-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.container-type-icon img,
+.service-type-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.container-type-name,
+.service-type-name {
+    flex: 1;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ios-text);
+}
+
+/* ================================================
+   Sub Lists
+   ================================================ */
+
+.sub-lists-wrapper {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sub-lists-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ios-text-secondary);
+    margin-bottom: 12px;
+    margin-left: 6px;
+}
+
+.sub-list-card {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sub-list-inner {
+    background: linear-gradient(145deg, #35393c 0%, #2e3235 100%);
+    border: 2px solid #3a3a3c;
+    border-radius: 14px;
+    padding: 16px 12px;
+    text-align: center;
+    position: relative;
+    transition: var(--transition-smooth);
+}
+
+.sub-list-checkbox:checked + .sub-list-inner {
+    border-color: var(--ios-blue);
+    background: linear-gradient(145deg, #3a3f42 0%, #35393c 100%);
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+}
+
+.sub-list-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 10px;
+}
+
+.sub-list-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sub-list-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ios-text);
+}
+
+/* ================================================
+   Button Enhancements
+   ================================================ */
+
+.ios-btn.btn-lg {
+    padding: 14px 40px;
+    font-size: 18px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #0a84ff 0%, #0066cc 100%);
+    border: none;
+    box-shadow: 0 10px 30px rgba(10, 132, 255, 0.4);
+}
+
+.ios-btn.btn-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(10, 132, 255, 0.5);
+}
+
+/* ================================================
+   Responsive Design
+   ================================================ */
+
+@media (max-width: 768px) {
+    .destinations-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .destination-arrow {
+        transform: rotate(90deg);
+        animation: pulse-arrow-down 2s infinite;
+    }
+    
+    @keyframes pulse-arrow-down {
+        0%, 100% { transform: rotate(90deg) translateX(0); }
+        50% { transform: rotate(90deg) translateX(6px); }
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    .shipping-type-icon {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* ================================================
+   Totals Footer Enhancement
+   ================================================ */
+
+.totals-footer {
+    background: linear-gradient(180deg, transparent 0%, rgba(28,28,30,0.95) 20%, rgba(28,28,30,1) 100%);
+    padding-top: 24px !important;
+}
+
+/* Fix select options in dark mode */
+.destinations-wrapper .form-select option {
+    background: var(--ios-card-bg);
+    color: var(--ios-text);
+}

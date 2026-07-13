@@ -1,0 +1,225 @@
+body{
+    /* background-image: url('https://source.unsplash.com/collection/3369095/1920x1080'); */
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.cover{
+    width: 100%;
+    height: 100%;
+    background-color: #48546100;
+    background-image: linear-gradient(315deg, #48546191 0%, #28313bc4 74%);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.Company {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+.brand {
+    border-radius: 4px;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 2rem;
+}
+
+.co-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    text-align:center;
+
+    background: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+    background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+.co-subtitle{
+    font-size: 18px;
+    color: #ddd;
+    text-align:center;
+
+    background: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+    background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.leading {
+    width: 86px;
+    height: 86px;
+    background: #ccc;
+    border-radius: 10px;
+    margin: 0px 10px;
+
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;
+    color: #fff;
+
+    background-color: #ff4e00;
+    background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);
+
+}
+
+.login-content {
+    display: flex;
+    /* background: #666; */
+    height: fit-content;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #f7b42c00;
+    background-image: linear-gradient(315deg, #f7b42c00 0%, #fc575e8a 74%);
+
+}
+
+.form-content{
+    height: fit-content;
+}
+
+
+.input-group-text{
+    background-color: #f7b42c;
+    background-image: linear-gradient(315deg, #f7b42c 0%, #fc575e 74%);
+    color: #fff;
+    border: none;
+}
+
+.btn-success{
+    background-color: #3bb78f;
+    background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+}
+
+.passAlert{
+    background-image: linear-gradient(315deg, #3f0d1200 0%, #a71d31c2 74%);
+    border: navajowhite;
+    color: #ff5959;
+}
+
+.passAlert-success{
+    background-image: linear-gradient(315deg, #3f0d1200 0%, #15ad6d 74%);
+    border: navajowhite;
+    color: #fff;
+}
+
+.border-css{
+    border-left-width: 3px !important;
+    border-left-style: solid;
+  border-image:
+    linear-gradient(
+      to bottom,
+      #ec9f05,
+      rgba(233, 100, 26, 0.1)
+    ) 1 100%;
+}
+
+
+.foot {
+    /* background: #000; */
+    width: 100%;
+    height: fit-content;
+    padding-top: 11px;
+    background: linear-gradient(0deg, rgba(1, 1, 1, 0.31) 41.15%, rgba(196, 196, 196, 0) 100%);
+}
+
+.copyright {
+    color: #959595;
+    font-size: 14px;
+}
+
+
+/* Animations  */
+.col-show{
+    animation: slideRight ;
+    animation-duration: 2s;
+    animation-direction: normal;
+    animation-timing-function: ease-in-out;
+    /* animation-delay: 2s; */
+
+}
+@keyframes slideRight {
+    0% {
+        margin-left: -50%;
+        opacity: 0;
+    }
+    50%{
+        margin-left: 0%;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.rowUp{
+    animation: showUp ;
+    animation-duration: 2s;
+    animation-direction: normal;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes showUp {
+    0% {
+
+        opacity: 0;
+    }
+    50%{
+        margin-bottom: 0%;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.langSwitcher{
+    font-size: 26px;
+    /* background: #fff; */
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ccc;
+    margin-top: 13px;
+
+
+    animation-name: fadeIn;
+    animation-duration: 2s;
+    /* animation-delay: 2s; */
+}
+
+.langSwitcher span {
+    background: linear-gradient(315deg, #b8c6db 0%, #f5f7fa 74%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: 0.5s;
+}
+
+.langSwitcher span:hover {
+    transition: 0.3s;
+    cursor: pointer;
+    font-size: 28px;
+}
+
+@keyframes fadeIn{
+    from{opacity: 0;}
+    to{
+        animation-delay: 2s;
+        opacity: 1;}
+}
+
+

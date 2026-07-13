@@ -1,0 +1,100 @@
+/* Optimized for 80mm thermal paper */
+@media screen {
+    .thermal-label-container {
+        display: none;
+    }
+}
+
+@media print {
+    @page {
+        margin: 0;
+        size: 80mm auto;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .thermal-label-container, .thermal-label-container * {
+        visibility: visible;
+    }
+
+    .thermal-label-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm;
+        padding: 5mm;
+        background: #fff;
+        color: #000;
+        font-family: 'Cairo', sans-serif;
+        font-size: 12pt;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+
+.label-header {
+    text-align: center;
+    border-bottom: 2px dashed #000;
+    margin-bottom: 5mm;
+    padding-bottom: 2mm;
+}
+
+.label-title {
+    font-size: 16pt;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.label-section {
+    margin-bottom: 4mm;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2mm;
+}
+
+.section-title {
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 1mm;
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1mm;
+}
+
+.label-row .key {
+    font-weight: bold;
+}
+
+.qr-container {
+    text-align: center;
+    margin: 5mm 0;
+}
+
+.qr-container img {
+    width: 40mm;
+    height: 40mm;
+}
+
+.tracking-no {
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.footer-note {
+    font-size: 9pt;
+    text-align: center;
+    font-style: italic;
+    margin-top: 5mm;
+    border-top: 1px dashed #000;
+    padding-top: 2mm;
+}

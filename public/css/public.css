@@ -1,0 +1,208 @@
+@import url('colors.css');
+body,html{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    background: var(--bodyBG);
+}
+
+/* public css */
+.cc{
+    display: flex;
+    align-items: center;
+}
+.links, .links:hover{
+    text-decoration: none;
+    color: currentColor;
+}
+
+.main-title{
+    font-size: 18px;
+    color: var(--black2);
+    text-transform: capitalize;
+}
+.table-title{
+    font-size: 16px;
+    color: #666;
+    text-transform: capitalize;
+}
+
+.text-control{
+    border-radius: 6px;
+}
+
+.f23{
+    font-size: 32px !important;
+}
+
+/* Navbar area */
+.main-nav{
+    z-index: 50;
+    /* background: var(--bodyBG); */
+}
+.main-nav .container-fluid{
+    margin-left: 50px ;
+}
+.profileMenu{
+    background: var(--black);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+
+.profileMenu img{
+    border-radius: 12px;
+}
+
+.ico-wrap{
+    width: 50px;
+    text-align: center;
+}
+.backArrow{
+    font-size: 26px;
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alert-bar{
+    font-size: 14px;
+}
+
+
+/* aside */
+.aside{
+    position: fixed;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 10px;
+    padding-bottom: 2rem;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 70px;
+    background: var(--black);
+
+}
+
+.aside::after{
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    background: var(--bodyBG);
+    right: -12px;
+    top: 0;
+    border-radius: 12px;
+}
+
+.aside-brand{
+    margin-top: 11px;
+
+    border-radius: 100%;
+}
+
+.aside-list{
+    list-style: none;
+    padding: 0px;
+
+}
+.aside-list li{
+    margin-bottom: 0.8rem;
+}
+.aitems{
+    width: 40px;
+    height: 40px;
+    background: var(--black2);
+    border-radius: 11px;
+    box-shadow: 0px 0px 5px #363636;
+    transition: 1s;
+
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6f6f6f;
+}
+.aitems:hover{
+    transition: 0.5s;
+    color: #fff;
+    box-shadow: 0px 0px 5px #747474;
+    cursor: pointer;
+}
+
+.logout-btn .aitems{
+    color: #fff;
+    background: var(--red);
+}
+
+
+
+/* MAIN STAGE */
+.main-stage{
+    width: 92%;
+    min-height: 100%;
+    margin-top: 80px;
+    margin-left: 80px;
+    /* background: #777; */
+}
+
+
+
+
+/* ========= System Snackbar Here ============= */
+
+.snackbar{
+    width: 100%;
+    min-height: 40px;
+    background: #292D30;
+    position: fixed;
+    z-index: 50;
+    left: 61px;
+    bottom: 0;
+
+    padding-top: 20px;
+    padding-bottom: 16px;
+    padding-right: 80px;
+    padding-left: 80px;
+    /* display: flex; */
+    /* display: none; */
+    bottom: -57px;
+    transition: 0.5s;
+
+}
+
+.snackbar::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 17px;
+    border-radius: 15px;
+    background: #eceef1;
+    top: -10px;
+    left: 1px;
+}
+
+
+
+/*============== Form Controls =============*/
+.form-select.selectColor{
+    color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-repeat: no-repeat !important;
+    background-position: right .75rem center !important;
+    background-size: 16px 12px !important;
+}

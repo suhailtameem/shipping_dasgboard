@@ -1,0 +1,11 @@
+
+.borderColor{
+    border-color: #484848 !important;
+}
+
+.form-floating .form-select{
+    color: #4f4f4f;
+    background-color: #e1e1e1;
+    border: none;
+    border-radius: 10px;
+}

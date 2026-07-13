@@ -1,0 +1,335 @@
+:root {
+    --ios-bg: #1c1c1e;
+    --ios-card-bg: #292D30;
+    --ios-text: #ffffff;
+    --ios-text-secondary: #a1a1aa;
+    --ios-blue: #0a84ff;
+    --ios-red: #ff453a;
+    --ios-green: #30d158;
+    --ios-warning: #ffd60a;
+    --ios-separator: #3a3a3c;
+    --ios-radius: 12px;
+}
+
+
+body {
+    background-color: var(--ios-bg);
+    color: var(--ios-text);
+}
+
+.main-stage{
+    padding-bottom: 7rem !important;
+}
+
+.aside::after{
+    background: #1c1c1e !important;
+}
+
+/* Web Layout Custom Container */
+.web-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 120px; /* Add more padding to avoid fixed footer overlap */
+}
+
+.ios-header {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ios-title {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--ios-text);
+    margin: 0;
+}
+
+.ios-card {
+    background-color: var(--ios-card-bg);
+    color: var(--ios-text);
+    border-radius: var(--ios-radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    height: 100%; /* Fill column height */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.ios-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+}
+
+/* Flat Colors for Headers */
+.bg-soft-primary {
+    background-color: rgba(10, 132, 255, 0.15) !important;
+    color: var(--ios-blue) !important;
+    border-bottom: 1px solid rgba(10, 132, 255, 0.1) !important;
+}
+.bg-soft-success {
+    background-color: rgba(48, 209, 88, 0.15) !important;
+    color: var(--ios-green) !important;
+    border-bottom: 1px solid rgba(48, 209, 88, 0.1) !important;
+}
+.bg-soft-warning {
+    background-color: rgba(255, 214, 10, 0.15) !important;
+    color: var(--ios-warning) !important;
+    border-bottom: 1px solid rgba(255, 214, 10, 0.1) !important;
+}
+.bg-soft-secondary {
+    background-color: rgba(142, 142, 147, 0.15) !important;
+    color: var(--ios-text-secondary) !important;
+    border-bottom: 1px solid rgba(142, 142, 147, 0.1) !important;
+}
+.bg-soft-danger {
+    background-color: rgba(255, 69, 58, 0.15) !important;
+    color: #ff453a !important;
+    border-bottom: 1px solid rgba(255, 69, 58, 0.1) !important;
+}
+
+.ios-group-header {
+    padding: 12px 16px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.ios-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ios-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background-color: var(--ios-card-bg);
+    border-bottom: 1px solid var(--ios-separator);
+    transition: background-color 0.2s;
+}
+
+.ios-list-item:hover {
+    background-color: #35393c;
+}
+
+.ios-list-item:last-child {
+    border-bottom: none;
+}
+
+.ios-label {
+    font-size: 15px;
+    color: var(--ios-text);
+    font-weight: 600;
+}
+
+.ios-value {
+    font-size: 15px;
+    color: var(--ios-text-secondary);
+    text-align: end;
+    flex: 1;
+    margin-inline-start: 20px;
+}
+
+.ios-input {
+    border: none;
+    background: transparent;
+    text-align: right;
+    width: 100%;
+    font-size: 15px;
+    color: var(--ios-blue);
+    outline: none;
+    font-weight: 500;
+}
+
+.ios-input:focus {
+    color: var(--ios-text);
+    border-bottom: 1px solid var(--ios-blue);
+}
+
+.ios-btn {
+    background-color: var(--ios-blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.ios-btn:hover { background-color: #0056b3; color: #fff;}
+.ios-btn:active { transform: scale(0.98); }
+
+.ios-btn-secondary {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--ios-blue) !important;
+}
+.ios-btn-secondary:hover { background-color: rgba(255, 255, 255, 0.15) !important; color: var(--ios-blue) !important; }
+
+.ios-action-row {
+    text-align: center;
+    padding: 14px;
+    color: var(--ios-blue);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+.ios-action-row:hover {
+    background-color: rgba(10, 132, 255, 0.1);
+}
+
+.avatar-icon {
+    width: 44px;
+    height: 44px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline-end: 14px;
+    color: var(--ios-blue);
+    font-size: 1.2rem;
+}
+
+.delete-btn {
+    color: var(--ios-red);
+    background: none;
+    border: none;
+    transition: opacity 0.2s;
+}
+.delete-btn:hover { opacity: 0.7; }
+
+/* Modal Styles */
+.modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    background-color: var(--ios-card-bg);
+    color: var(--ios-text);
+}
+.modal-header {
+    border-bottom: 1px solid var(--ios-separator);
+    padding: 15px 20px;
+    background-color: rgba(41, 45, 48, 0.95);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+.modal-footer {
+    border-top: 1px solid var(--ios-separator);
+    padding: 15px 20px;
+    background-color: rgba(41, 45, 48, 0.95);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1px solid var(--ios-separator);
+    padding: 10px;
+    background-color: var(--ios-bg);
+    color: var(--ios-text);
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--ios-bg);
+    color: var(--ios-text);
+    border-color: var(--ios-blue);
+    box-shadow: none;
+}
+.form-select option {
+    background-color: var(--ios-card-bg);
+    color: var(--ios-text);
+}
+
+.totals-footer {
+    background: var(--ios-card-bg) !important;
+    color: var(--ios-text);
+    left: 60px;
+    padding-left: 2rem !important; 
+    padding-right: 2rem !important; 
+    border-top: 1px solid var(--ios-separator);
+}
+
+.totals-footer .text-muted {
+    color: var(--ios-text-secondary) !important;
+}
+.striped-row {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Additional dark styling overrides */
+.ios-card .border-end,
+.ios-card .border-bottom,
+.ios-card .border-top,
+.ios-card .border-start {
+    border-color: var(--ios-separator) !important;
+}
+
+.ios-card textarea.form-control {
+    background-color: var(--ios-bg) !important;
+    color: var(--ios-text) !important;
+    border: none !important;
+}
+
+.ios-table {
+    width: 100%;
+    margin-bottom: 0;
+    color: var(--ios-text);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.ios-table thead tr {
+    background-color: var(--ios-bg) !important;
+    color: var(--ios-text-secondary) !important;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.ios-table th, 
+.ios-table td {
+    padding: 14px 16px !important;
+    border-bottom: 1px solid var(--ios-separator) !important;
+    vertical-align: middle;
+}
+
+.ios-table tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.ios-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.ios-table input.form-control,
+.ios-table select.form-select {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--ios-text) !important;
+    padding: 0 !important;
+    font-size: 15px;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ios-table input.form-control:focus,
+.ios-table select.form-select:focus {
+    color: var(--ios-blue) !important;
+}
+
+/* Remove old table styles to avoid conflicts */
+.newPackagesTable, .expenses-table {
+    display: none !important; /* We will replace these classes in HTML */
+}
+
+.form-check-input {
+    z-index: 2;
+    position: relative;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
