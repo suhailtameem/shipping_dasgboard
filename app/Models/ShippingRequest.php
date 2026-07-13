@@ -96,4 +96,9 @@ class ShippingRequest extends Model
     {
         return $this->hasMany(ShipmentExpense::class, 'shipment_id');
     }
+
+    public function shipmentServices()
+    {
+        return $this->hasMany(ShipmentService::class, 'shipment_id');
+    }
 }

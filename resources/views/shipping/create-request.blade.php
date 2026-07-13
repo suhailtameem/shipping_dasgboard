@@ -136,7 +136,7 @@
                                     @foreach($type->subLists as $sub)
                                     <div class="col-md-3 col-6">
                                         <label class="sub-list-card">
-                                            <input type="checkbox" name="subContainerType[]" value="{{ $sub->value }}" class="sub-list-checkbox d-none" data-parent="{{ $type->id }}">
+                                            <input type="checkbox" name="subContainerType[]" value="{{ $sub->id }}" class="sub-list-checkbox d-none" data-parent="{{ $type->id }}">
                                             <div class="sub-list-inner">
                                                 <div class="sub-list-icon">
                                                     <img src="{{ $sub->imgUrl ?? asset('imgs/box_def.jpg') }}" alt="{{ $lang == 'Ar' ? $sub->ar : $sub->en }}">
@@ -193,7 +193,7 @@
                                     @foreach($type->subLists as $sub)
                                     <div class="col-md-3 col-6">
                                         <label class="sub-list-card">
-                                            <input type="checkbox" name="subServiceType[]" value="{{ $sub->value }}" class="sub-list-checkbox d-none" data-parent="{{ $type->id }}">
+                                            <input type="checkbox" name="subServiceType[]" value="{{ $sub->id }}" class="sub-list-checkbox d-none" data-parent="{{ $type->id }}">
                                             <div class="sub-list-inner">
                                                 <div class="sub-list-icon">
                                                     <img src="{{ $sub->imgUrl ?? asset('imgs/box_def.jpg') }}" alt="{{ $lang == 'Ar' ? $sub->ar : $sub->en }}">

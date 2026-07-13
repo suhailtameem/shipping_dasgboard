@@ -373,4 +373,15 @@
         "Auto"=>"Auto",
         "Mode"=>"Mode",
         "Default"=>"Default",
+        // Services & Containers Section
+        "ServicesAndContainers"=>"Services & Containers",
+        "AddService"=>"Add Service",
+        "ServiceTitle"=>"Title",
+        "UnitPrice"=>"Unit Price",
+        "Quantity"=>"Qty",
+        "Total"=>"Total",
+        "NoServicesAdded"=>"No services or containers added yet",
+        "ServiceSaved"=>"Service saved successfully",
+        "ServiceDeleted"=>"Service deleted successfully",
+        "SelectServiceToAdd"=>"Select a service or container to add",
     ];

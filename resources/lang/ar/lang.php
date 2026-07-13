@@ -373,4 +373,15 @@
         "Auto"=>"تلقائي",
         "Mode"=>"وضع",
         "Default"=>"افتراضي",
+        // قسم الخدمات والحاويات
+        "ServicesAndContainers"=>"الخدمات والحاويات",
+        "AddService"=>"إضافة خدمة",
+        "ServiceTitle"=>"العنوان",
+        "UnitPrice"=>"سعر الوحدة",
+        "Quantity"=>"الكمية",
+        "Total"=>"الإجمالي",
+        "NoServicesAdded"=>"لم تُضف أي خدمات أو حاويات بعد",
+        "ServiceSaved"=>"تم حفظ الخدمة بنجاح",
+        "ServiceDeleted"=>"تم حذف الخدمة بنجاح",
+        "SelectServiceToAdd"=>"اختر خدمة أو حاوية للإضافة",
     ];

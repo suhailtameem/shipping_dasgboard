@@ -103,25 +103,48 @@ document.addEventListener('DOMContentLoaded', function() {
 
     submitBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
-            // First, set container type (for compatibility with existing code)
-            const firstContainerChecked = document.querySelector('.container-type-checkbox:checked');
-            if (firstContainerChecked) {
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'containerType';
-                hiddenInput.value = firstContainerChecked.value;
-                form.appendChild(hiddenInput);
-            }
+            // Remove any previously appended hidden inputs to avoid duplicates
+            form.querySelectorAll('input.dynamic-selection').forEach(el => el.remove());
 
-            // Set service type (for compatibility)
-            const firstServiceChecked = document.querySelector('.service-type-checkbox:checked');
-            if (firstServiceChecked) {
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'serviceType';
-                hiddenInput.value = firstServiceChecked.value;
-                form.appendChild(hiddenInput);
-            }
+            // Collect ALL checked container type sub-list IDs
+            document.querySelectorAll('.container-type-checkbox:checked').forEach(cb => {
+                const hidden = document.createElement('input');
+                hidden.type  = 'hidden';
+                hidden.name  = 'containerType[]';
+                hidden.value = cb.value;
+                hidden.className = 'dynamic-selection';
+                form.appendChild(hidden);
+            });
+
+            // Collect ALL checked sub-container type IDs
+            document.querySelectorAll('.sub-list-checkbox:checked').forEach(cb => {
+                const hidden = document.createElement('input');
+                hidden.type  = 'hidden';
+                hidden.name  = 'containerType[]';
+                hidden.value = cb.value;
+                hidden.className = 'dynamic-selection';
+                form.appendChild(hidden);
+            });
+
+            // Collect ALL checked service type sub-list IDs
+            document.querySelectorAll('.service-type-checkbox:checked').forEach(cb => {
+                const hidden = document.createElement('input');
+                hidden.type  = 'hidden';
+                hidden.name  = 'serviceType[]';
+                hidden.value = cb.value;
+                hidden.className = 'dynamic-selection';
+                form.appendChild(hidden);
+            });
+
+            // Collect ALL checked sub-service type IDs
+            document.querySelectorAll('.sub-list-checkbox[name="subServiceType[]"]:checked').forEach(cb => {
+                const hidden = document.createElement('input');
+                hidden.type  = 'hidden';
+                hidden.name  = 'serviceType[]';
+                hidden.value = cb.value;
+                hidden.className = 'dynamic-selection';
+                form.appendChild(hidden);
+            });
 
             // Submit form
             form.submit();

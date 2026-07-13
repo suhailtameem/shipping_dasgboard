@@ -10,7 +10,7 @@ use App\Http\Controllers\receiverController;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\App;
 use Illuminate\Http\Request;
-use App\Models\{ShippingRequest, packages, customers as ShipCustomer, ShipmentExpense, ExpenseType, currencies as Currency, company as Company, lists as ListModel, subList, shDestinations};
+use App\Models\{ShippingRequest, packages, customers as ShipCustomer, ShipmentExpense, ShipmentService, ExpenseType, currencies as Currency, company as Company, lists as ListModel, subList, shDestinations};
 use App\Services\CurrencyService;
 
 // use App\Http\Controllers\requestsControllrt;
@@ -210,11 +210,20 @@ class requestsControllrt extends Controller
         $fi = 'Shipping Request Not Saved';
         $TNO = $this->GenTNO();
 
+        // Parse containerized and clearance as comma-separated strings of non-numeric values
+        $containerized = collect($request->input('containerType'))->filter(function($val) {
+            return !is_numeric($val);
+        })->implode(', ');
+
+        $clearnce = collect($request->input('serviceType'))->filter(function($val) {
+            return !is_numeric($val);
+        })->implode(', ');
+
         $store = ShippingRequest::create([
             #Form inputs
             'sh_type' => $request->input('shippType'),
-            'containerized' => $request->input('containerType'),
-            'clearnce' => $request->input('serviceType'),
+            'containerized' => $containerized ?: null,
+            'clearnce' => $clearnce ?: null,
             'from' => $request->input('fromCountry'),
             'to' => $request->input('toCountry'),
             #Form hidden inputs
@@ -231,8 +240,33 @@ class requestsControllrt extends Controller
         ]);
 
         if ($store) {
-            //status stype App
             $RID = $store->id;
+
+            // ── Save selected sub-list items (containers & services) ──
+            $selectedSubIds = array_filter(
+                array_merge(
+                    (array) $request->input('containerType', []),
+                    (array) $request->input('serviceType', [])
+                ),
+                'is_numeric'
+            );
+
+            if (!empty($selectedSubIds)) {
+                $subItems = subList::with('parentList')->whereIn('id', $selectedSubIds)->get();
+                foreach ($subItems as $sub) {
+                    $parentEn = $sub->parentList->en ?? '';
+                    $parentAr = $sub->parentList->ar ?? '';
+                    ShipmentService::create([
+                        'shipment_id' => $RID,
+                        'sub_list_id' => $sub->id,
+                        'title_en'    => $sub->en . ($parentEn ? ' (' . $parentEn . ')' : ''),
+                        'title_ar'    => $sub->ar . ($parentAr ? ' (' . $parentAr . ')' : ''),
+                        'price'       => $sub->price ?? 0,
+                        'quantity'    => 1,
+                    ]);
+                }
+            }
+
             $lang = $request->lang;
             $this->Response($succ, 'success', 'web');
             return redirect()
@@ -710,7 +744,8 @@ class requestsControllrt extends Controller
             'shippingType',
             'containerType',
             'serviceType',
-            'status'
+            'status',
+            'shipmentServices',
         ])->findOrFail($RID);
 
         // Get base totals from service using currency ID
@@ -751,11 +786,16 @@ class requestsControllrt extends Controller
             'cuid'          => $this->getCuidByGateway($shipment->getway),
 
             // Expenses
-            'expenses'      => $shipment->expenses,
-            'expenseTypes'  => ExpenseType::where('is_active', true)->get(),
-            'totalExpenses' => $this->currencyService->calculateOrderExpensesTotal($shipment->expenses),
-            'finalTotal'    => $this->currencyService->calculateFinalInvoice($shipment->packages, $shipment->expenses, $shipment->sh_type, $shipment->from, $shipment->to, $currencyId),
-            'currencies'    => Currency::orderBy('currency')->get(),
+            'expenses'          => $shipment->expenses,
+            'expenseTypes'      => ExpenseType::where('is_active', true)->get(),
+            'totalExpenses'     => $this->currencyService->calculateOrderExpensesTotal($shipment->expenses),
+            'totalServices'     => $this->currencyService->calculateOrderServicesTotal($shipment->shipmentServices, $currencyId),
+            'finalTotal'        => $this->currencyService->calculateFinalInvoice($shipment->packages, $shipment->expenses, $shipment->sh_type, $shipment->from, $shipment->to, $currencyId, $shipment->shipmentServices),
+            'currencies'        => Currency::orderBy('currency')->get(),
+
+            // Shipment Services (containers & additional services)
+            'shipmentServices'  => $shipment->shipmentServices,
+            'allSubLists'       => subList::with('parentList')->orderBy('list_id')->get(),
             'company'       => Company::first() ?? (object)[
                 'name_en' => 'Shipping Co.', 
                 'name_ar' => 'شركة الشحن', 
@@ -996,5 +1036,60 @@ class requestsControllrt extends Controller
         ];
 
         return view('shipping.create-request', $data);
+    }
+
+    // ============= Shipment Services CRUD =============
+
+    public function storeShipmentService(Request $request)
+    {
+        $request->validate([
+            'shipment_id' => 'required|exists:shipping_requests,id',
+            'sub_list_id' => 'nullable|exists:sub_lists,id',
+            'title_en'    => 'required|string|max:255',
+            'title_ar'    => 'required|string|max:255',
+            'price'       => 'required|numeric|min:0',
+            'quantity'    => 'required|integer|min:1',
+        ]);
+
+        ShipmentService::create([
+            'shipment_id' => $request->shipment_id,
+            'sub_list_id' => $request->sub_list_id,
+            'title_en'    => $request->title_en,
+            'title_ar'    => $request->title_ar,
+            'price'       => $request->price,
+            'quantity'    => $request->quantity,
+        ]);
+
+        $this->Response('Service added successfully', 'success', 'web');
+        return redirect()->back();
+    }
+
+    public function updateShipmentService(Request $request)
+    {
+        $request->validate([
+            'service_id' => 'required|exists:shipment_services,id',
+            'price'      => 'required|numeric|min:0',
+            'quantity'   => 'required|integer|min:1',
+        ]);
+
+        ShipmentService::whereId($request->service_id)->update([
+            'price'    => $request->price,
+            'quantity' => $request->quantity,
+        ]);
+
+        $this->Response('Service updated successfully', 'success', 'web');
+        return redirect()->back();
+    }
+
+    public function deleteShipmentService(Request $request)
+    {
+        $request->validate([
+            'service_id' => 'required|exists:shipment_services,id',
+        ]);
+
+        ShipmentService::destroy($request->service_id);
+
+        $this->Response('Service deleted successfully', 'success', 'web');
+        return redirect()->back();
     }
 }

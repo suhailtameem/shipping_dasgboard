@@ -358,6 +358,73 @@
         @endif
     </div>
 
+    {{-- Services & Containers Section --}}
+    <div class="ios-card mb-4">
+        <div class="ios-group-header bg-soft-success d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-layers-half me-2"></i>@lang('lang.ServicesAndContainers')</span>
+            <button type="button" class="ios-btn bg-soft-success text-white" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+                <i class="bi bi-plus-circle me-1"></i> @lang('lang.AddService')
+            </button>
+        </div>
+        @if(count($shipmentServices) > 0)
+            <div class="table-responsive">
+                <table class="ios-table">
+                    <thead>
+                        <tr class="text-muted small text-uppercase">
+                            <th class="ps-4 border-0" style="width: 50px;">#</th>
+                            <th class="border-0">@lang('lang.ServiceTitle')</th>
+                            <th class="border-0 text-center" style="width: 150px;">@lang('lang.UnitPrice') (USD)</th>
+                            <th class="border-0 text-center" style="width: 100px;">@lang('lang.Quantity')</th>
+                            <th class="border-0 text-center" style="width: 120px;">@lang('lang.Total') (USD)</th>
+                            <th class="border-0 text-center" style="width: 120px;">@lang('lang.Actions')</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($shipmentServices as $index => $service)
+                        <tr>
+                            <td class="ps-4 align-middle">{{ $index + 1 }}</td>
+                            <td class="align-middle fw-bold text-white">
+                                {{ $lang == 'Ar' ? $service->title_ar : $service->title_en }}
+                            </td>
+                            <td class="align-middle">
+                                <form action="{{ url('/updateShipmentService') }}" method="POST" id="update-service-{{ $service->id }}" class="d-flex align-items-center justify-content-center m-0">
+                                    @csrf
+                                    <input type="hidden" name="service_id" value="{{ $service->id }}">
+                                    <input type="number" name="price" class="form-control form-control-sm text-center bg-soft-secondary text-white border-0 py-1" value="{{ $service->price }}" step="0.01" min="0" required style="width: 90px;">
+                                </form>
+                            </td>
+                            <td class="align-middle">
+                                <input type="number" name="quantity" form="update-service-{{ $service->id }}" class="form-control form-control-sm text-center bg-soft-secondary text-white border-0 py-1" value="{{ $service->quantity }}" min="1" required style="width: 70px;">
+                            </td>
+                            <td class="align-middle text-center text-success fw-bold">
+                                ${{ number_format($service->price * $service->quantity, 2) }}
+                            </td>
+                            <td class="align-middle text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                    <button type="submit" form="update-service-{{ $service->id }}" class="btn btn-link btn-sm p-0 text-primary" title="@lang('lang.SaveChanges')">
+                                        <i class="bi bi-check-circle-fill f20"></i>
+                                    </button>
+                                    <form action="{{ url('/deleteShipmentService') }}" method="POST" class="d-inline m-0">
+                                        @csrf
+                                        <input type="hidden" name="service_id" value="{{ $service->id }}">
+                                        <button type="submit" class="btn btn-link btn-sm p-0 text-danger" onclick="return confirm('Are you sure you want to delete this service?')" title="@lang('lang.Delete')">
+                                            <i class="bi bi-trash-fill f20"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="ios-list-item text-center">
+                <span class="text-muted w-100">@lang('lang.NoServicesAdded')</span>
+            </div>
+        @endif
+    </div>
+
         {{-- Shipment Expenses Section --}}
     @if($expenses->count() > 0)
     <div class="ios-card mb-4"> 

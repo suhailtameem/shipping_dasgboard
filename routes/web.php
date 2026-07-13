@@ -259,6 +259,11 @@ Route::post('/bulkDeleteExpenses', [requestsControllrt::class, 'bulkDeleteExpens
     Route::post('/calculateLiveTotals', [requestsControllrt::class, 'calculateLiveTotals']);
     Route::get('/scan/{tno}', [requestsControllrt::class, 'handleQrScan']);
 
+//=== Shipment Services (Containers & Additional Services) ===
+Route::post('/storeShipmentService',  [requestsControllrt::class, 'storeShipmentService']);
+Route::post('/updateShipmentService', [requestsControllrt::class, 'updateShipmentService']);
+Route::post('/deleteShipmentService', [requestsControllrt::class, 'deleteShipmentService']);
+
 //=== Run Expenses seeder 
 Route::get('/run-expenses-seeder', function () {
     Artisan::call('db:seed --class=ExpensesSeeder');

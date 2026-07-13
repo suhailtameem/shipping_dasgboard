@@ -105,13 +105,28 @@ class CurrencyService
     }
 
     /**
-     * Calculates the final invoice total (Contents + Expenses).
+     * Calculates the total cost of all shipment services in the order currency.
      */
-    public function calculateFinalInvoice($packages, $expenses, string $shippingType, string $from, string $to, int $orderCurrencyId): float
+    public function calculateOrderServicesTotal($shipmentServices, int $orderCurrencyId): float
+    {
+        $totalUsd = 0.0;
+        if ($shipmentServices) {
+            foreach ($shipmentServices as $service) {
+                $totalUsd += (float) $service->price * (int) $service->quantity;
+            }
+        }
+        return $this->convertUsdToCurrency($totalUsd, $orderCurrencyId);
+    }
+
+    /**
+     * Calculates the final invoice total (Contents + Expenses + Services).
+     */
+    public function calculateFinalInvoice($packages, $expenses, string $shippingType, string $from, string $to, int $orderCurrencyId, $shipmentServices = []): float
     {
         $contentsTotal = $this->calculateOrderContentsTotal($packages, $shippingType, $from, $to, $orderCurrencyId);
         $expensesTotal = $this->calculateOrderExpensesTotal($expenses);
+        $servicesTotal = $this->calculateOrderServicesTotal($shipmentServices, $orderCurrencyId);
 
-        return $contentsTotal + $expensesTotal;
+        return $contentsTotal + $expensesTotal + $servicesTotal;
     }
 }

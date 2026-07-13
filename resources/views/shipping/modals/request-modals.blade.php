@@ -456,3 +456,100 @@
         </div>
     </div>
 </div>
+
+<!-- Add New Service Modal -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" dir="{{ $dir }}">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addServiceModalLabel">
+                    <i class="bi bi-plus-circle me-2"></i>@lang('lang.AddService')
+                </h5>
+                <button type="button" class="btn-close mx-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url('/storeShipmentService') }}" method="POST" id="addServiceForm">
+                    @csrf
+                    <input type="hidden" name="shipment_id" value="{{ $RID }}">
+                    <input type="hidden" name="sub_list_id" id="modal_sub_list_id" value="">
+
+                    <!-- Service Preset Select -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-white">@lang('lang.Select')</label>
+                        <select id="modal_service_selector" class="form-select bg-soft-secondary text-white border-0" onchange="onModalServiceChange(this)">
+                            <option value="" data-price="0" data-en="" data-ar="">-- @lang('lang.SelectServiceToAdd') --</option>
+                            @foreach($allSubLists as $item)
+                                <option value="{{ $item->id }}" 
+                                        data-price="{{ $item->price }}" 
+                                        data-en="{{ $item->en }}{{ $item->parentList ? ' (' . $item->parentList->en . ')' : '' }}" 
+                                        data-ar="{{ $item->ar }}{{ $item->parentList ? ' (' . $item->parentList->ar . ')' : '' }}">
+                                    {{ $lang == 'Ar' ? $item->ar : $item->en }} {{ $item->parentList ? ' (' . ($lang == 'Ar' ? $item->parentList->ar : $item->parentList->en) . ')' : '' }} - ${{ number_format($item->price, 2) }}
+                                </option>
+                            @endforeach
+                            <option value="custom" data-price="0" data-en="" data-ar="">[+] Custom Service / Container</option>
+                        </select>
+                    </div>
+
+                    <!-- Title English -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-white">Title (English)</label>
+                        <input type="text" name="title_en" id="modal_title_en" class="form-control bg-soft-secondary text-white border-0" required placeholder="E.g., Extra Packaging">
+                    </div>
+
+                    <!-- Title Arabic -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-white">العنوان (بالعربية)</label>
+                        <input type="text" name="title_ar" id="modal_title_ar" class="form-control bg-soft-secondary text-white border-0" required placeholder="مثال: تغليف إضافي">
+                    </div>
+
+                    <div class="row">
+                        <!-- Unit Price -->
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold text-white">@lang('lang.UnitPrice') (USD)</label>
+                            <input type="number" name="price" id="modal_price" class="form-control bg-soft-secondary text-white border-0" step="0.01" min="0" required value="0">
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold text-white">@lang('lang.Quantity')</label>
+                            <input type="number" name="quantity" id="modal_quantity" class="form-control bg-soft-secondary text-white border-0" min="1" required value="1">
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-3">
+                        <button type="submit" class="ios-btn py-3 bg-soft-success text-white">
+                            <i class="bi bi-check-circle me-1"></i> @lang('lang.SaveChanges')
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function onModalServiceChange(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    if (!selectedOption || select.value === "") {
+        document.getElementById('modal_sub_list_id').value = "";
+        document.getElementById('modal_title_en').value = "";
+        document.getElementById('modal_title_ar').value = "";
+        document.getElementById('modal_price').value = "0";
+        return;
+    }
+
+    if (select.value === "custom") {
+        document.getElementById('modal_sub_list_id').value = "";
+        document.getElementById('modal_title_en').value = "";
+        document.getElementById('modal_title_ar').value = "";
+        document.getElementById('modal_price').value = "0";
+        document.getElementById('modal_title_en').focus();
+    } else {
+        document.getElementById('modal_sub_list_id').value = select.value;
+        document.getElementById('modal_title_en').value = selectedOption.getAttribute('data-en') || "";
+        document.getElementById('modal_title_ar').value = selectedOption.getAttribute('data-ar') || "";
+        document.getElementById('modal_price').value = selectedOption.getAttribute('data-price') || "0";
+    }
+}
+</script>
+
