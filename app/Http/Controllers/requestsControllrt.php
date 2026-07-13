@@ -220,7 +220,7 @@ class requestsControllrt extends Controller
             #Form hidden inputs
             'getway' => $request->input('getway'), //1-admin 2-user 3-other
             'getway_type' => '1', //1-web 2-mobile 3-other
-            'cid' => $request->input('cuid'),
+            'cid' => null,
             #Defoult
             'total_weight' => '0',
             'shid' => '-1',

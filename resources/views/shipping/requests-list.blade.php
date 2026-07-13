@@ -128,14 +128,18 @@
                                         </td>
                                         <td>
                                             <div class="text-limit" >
-                                                <a
-                                                    href="#"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#customer-model-{{$Ritem->cid}}"
-                                                    title="View Customer Profile"
-                                                    class="links names w-100 ">
-                                                    {{ $Ritem->customer->first.' '.$Ritem->customer->last}}
-                                                </a>
+                                                @if($Ritem->customer)
+                                                    <a
+                                                        href="#"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#customer-model-{{$Ritem->cid}}"
+                                                        title="View Customer Profile"
+                                                        class="links names w-100 ">
+                                                        {{ $Ritem->customer->first.' '.$Ritem->customer->last}}
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted small">@lang('lang.NoCustomerAssigned')</span>
+                                                @endif
                                             </div>
                                             <!-- Customer Profile Modal Integration -->
                                             @if($Ritem->customer)
