@@ -865,12 +865,28 @@ class requestsControllrt extends Controller
 
     public function updateOrderCurrency(Request $request)
     {
-        $RID = $request->input('rid');
-        $newCurrencyId = $request->input('currency_id');
+        $RID           = $request->input('rid');
+        $newCurrencyId = (int) $request->input('currency_id');
 
-        $shippingRequest = ShippingRequest::findOrFail($RID);
-        
-        // Update currency ID and trigger recalculation
+        $shippingRequest = ShippingRequest::with('expenses')->findOrFail($RID);
+
+        // Determine the old currency (fallback to USD)
+        $oldCurrencyId = (int) ($shippingRequest->currency_id ?? 0);
+        if (!$oldCurrencyId) {
+            $usd           = Currency::where('currency', 'USD')->first();
+            $oldCurrencyId = $usd ? (int) $usd->id : 1;
+        }
+
+        // Convert all existing expense amounts: old currency -> USD -> new currency
+        if ($oldCurrencyId !== $newCurrencyId && $shippingRequest->expenses->isNotEmpty()) {
+            foreach ($shippingRequest->expenses as $expense) {
+                $amountInUsd    = $this->currencyService->convertCurrencyToUsd((float) $expense->amount, $oldCurrencyId);
+                $amountInNewCur = $this->currencyService->convertUsdToCurrency($amountInUsd, $newCurrencyId);
+                $expense->update(['amount' => round($amountInNewCur, 4)]);
+            }
+        }
+
+        // Update currency ID and trigger package/service total recalculation
         $shippingRequest->update(['currency_id' => $newCurrencyId]);
         $this->calcTotalWeight($RID);
 
@@ -917,51 +933,54 @@ class requestsControllrt extends Controller
 
     public function calculateLiveTotals(Request $request)
     {
-        $rid = $request->input('rid');
-        $weights = $request->input('weights', []);
-        $expenses = $request->input('expenses', []);
+        $rid        = $request->input('rid');
+        $weights    = $request->input('weights', []);
+        $expenses   = $request->input('expenses', []);
         $currencyId = $request->input('currency_id');
 
-        $shipment = ShippingRequest::findOrFail($rid);
-        
+        // Load shipment with both packages (for accurate pricing) and services
+        $shipment = ShippingRequest::with(['packages', 'shipmentServices'])->findOrFail($rid);
+
         if (!$currencyId) {
             $currencyId = $shipment->currency_id;
         }
-        
         if (!$currencyId) {
-            $usd = Currency::where('currency', 'USD')->first();
-            $currencyId = $usd ? $usd->id : null;
+            $usd        = Currency::where('currency', 'USD')->first();
+            $currencyId = $usd ? $usd->id : 1;
         }
+        $currencyId = (int) $currencyId;
 
-        // 1. Calculate Total Weight
+        // 1. Total Weight (from live form inputs)
         $totalWeight = array_sum(array_map('floatval', $weights));
 
-        // 2. Calculate Contents Price (using Service)
-        // Convert array of weights into a collection of pseudo-packages for the service
-        $pseudoPackages = collect($weights)->map(function($w) {
-            return (object)['weight' => floatval($w)];
-        });
-
+        // 2. Contents Total — use actual saved packages (respects custom prices stored in USD)
         $contentsTotal = $this->currencyService->calculateOrderContentsTotal(
-            $pseudoPackages,
+            $shipment->packages,
             $shipment->sh_type,
             $shipment->from,
             $shipment->to,
             $currencyId
         );
 
-        // 3. Calculate Expenses Total
+        // 3. Expenses Total — amounts are stored in the order currency, just sum them
         $expensesTotal = array_sum(array_map('floatval', $expenses));
 
-        // 4. Final Total
-        $finalTotal = $contentsTotal + $expensesTotal;
+        // 4. Services Total — prices stored in USD, convert to order currency
+        $servicesTotal = $this->currencyService->calculateOrderServicesTotal(
+            $shipment->shipmentServices,
+            $currencyId
+        );
+
+        // 5. Grand Total = Contents + Expenses + Services
+        $finalTotal = $contentsTotal + $expensesTotal + $servicesTotal;
 
         return response()->json([
-            'totalWeight' => $totalWeight,
+            'totalWeight'   => $totalWeight,
             'contentsTotal' => $contentsTotal,
             'expensesTotal' => $expensesTotal,
-            'finalTotal' => $finalTotal,
-            'currency' => Currency::find($currencyId)->currency ?? 'USD'
+            'servicesTotal' => $servicesTotal,
+            'finalTotal'    => $finalTotal,
+            'currency'      => Currency::find($currencyId)->currency ?? 'USD',
         ]);
     }
 
@@ -1081,13 +1100,24 @@ class requestsControllrt extends Controller
     public function updateShipmentService(Request $request)
     {
         $request->validate([
-            'service_id' => 'required|exists:shipment_services,id',
-            'price'      => 'required|numeric|min:0',
-            'quantity'   => 'required|integer|min:1',
+            'service_id'  => 'required|exists:shipment_services,id',
+            'price'       => 'required|numeric|min:0',
+            'quantity'    => 'required|integer|min:1',
+            'shipment_id' => 'required|exists:shipping_requests,id',
         ]);
 
+        // The submitted price is in the order currency (displayed converted from USD).
+        // Convert it back to USD before storing so all service prices stay in USD.
+        $shipment   = ShippingRequest::findOrFail($request->shipment_id);
+        $currencyId = (int) ($shipment->currency_id ?? 0);
+        if (!$currencyId) {
+            $usd        = Currency::where('currency', 'USD')->first();
+            $currencyId = $usd ? (int) $usd->id : 1;
+        }
+        $priceInUsd = $this->currencyService->convertCurrencyToUsd((float) $request->price, $currencyId);
+
         ShipmentService::whereId($request->service_id)->update([
-            'price'    => $request->price,
+            'price'    => $priceInUsd,
             'quantity' => $request->quantity,
         ]);
 

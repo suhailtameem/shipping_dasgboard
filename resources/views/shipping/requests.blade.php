@@ -2,6 +2,15 @@
     $RID = $shipment->id;
     $ShippmentContent = $shipment->packages;
 @endphp
+@php
+    // Shared currency context — used across all money sections
+    $reqCurrency   = $shipment->orderCurrency->currency ?? 'USD';
+    $reqCurrencyId = (int)($shipment->currency_id ?? 0);
+    if (!$reqCurrencyId) {
+        $usdCurrObj    = App\Models\currencies::where('currency', 'USD')->first();
+        $reqCurrencyId = $usdCurrObj ? (int)$usdCurrObj->id : 1;
+    }
+@endphp
 
 <head>
     <link rel="stylesheet" href="{{ asset('css/request-details.css') }}">
@@ -394,14 +403,17 @@
                         <tr class="text-muted small text-uppercase">
                             <th class="ps-4 border-0" style="width: 50px;">#</th>
                             <th class="border-0">@lang('lang.ServiceTitle')</th>
-                            <th class="border-0 text-center" style="width: 150px;">@lang('lang.UnitPrice') (USD)</th>
+                            <th class="border-0 text-center" style="width: 150px;">@lang('lang.UnitPrice') ({{ $reqCurrency }})</th>
                             <th class="border-0 text-center" style="width: 100px;">@lang('lang.Quantity')</th>
-                            <th class="border-0 text-center" style="width: 120px;">@lang('lang.Total') (USD)</th>
+                            <th class="border-0 text-center" style="width: 120px;">@lang('lang.Total') ({{ $reqCurrency }})</th>
                             <th class="border-0 text-center" style="width: 120px;">@lang('lang.Actions')</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($shipmentServices as $index => $service)
+                        @php
+                            $displaySvcPrice = $currencyService->convertUsdToCurrency((float)$service->price, $reqCurrencyId);
+                        @endphp
                         <tr>
                             <td class="ps-4 align-middle">{{ $index + 1 }}</td>
                             <td class="align-middle fw-bold text-white">
@@ -411,14 +423,15 @@
                                 <form action="{{ url('/updateShipmentService') }}" method="POST" id="update-service-{{ $service->id }}" class="d-flex align-items-center justify-content-center m-0">
                                     @csrf
                                     <input type="hidden" name="service_id" value="{{ $service->id }}">
-                                    <input type="number" name="price" class="form-control form-control-sm text-center bg-soft-secondary text-white border-0 py-1" value="{{ $service->price }}" step="0.01" min="0" required style="width: 90px;">
+                                    <input type="hidden" name="shipment_id" value="{{ $shipment->id }}">
+                                    <input type="number" name="price" class="form-control form-control-sm text-center bg-soft-secondary text-white border-0 py-1" value="{{ round($displaySvcPrice, 2) }}" step="0.01" min="0" required style="width: 90px;">
                                 </form>
                             </td>
                             <td class="align-middle">
                                 <input type="number" name="quantity" form="update-service-{{ $service->id }}" class="form-control form-control-sm text-center bg-soft-secondary text-white border-0 py-1" value="{{ $service->quantity }}" min="1" required style="width: 70px;">
                             </td>
                             <td class="align-middle text-center text-success fw-bold">
-                                ${{ number_format($service->price * $service->quantity, 2) }}
+                                {{ number_format($displaySvcPrice * $service->quantity, 2) }} {{ $reqCurrency }}
                             </td>
                             <td class="align-middle text-center">
                                 <div class="d-flex align-items-center justify-content-center gap-2">
