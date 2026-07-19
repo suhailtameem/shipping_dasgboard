@@ -384,4 +384,23 @@
         "ServiceSaved"=>"Service saved successfully",
         "ServiceDeleted"=>"Service deleted successfully",
         "SelectServiceToAdd"=>"Select a service or container to add",
+        
+        // Receipt Page
+        "Receipt"=>"Receipt",
+        "PrintReceipt"=>"Print Receipt",
+        "BackToRequest"=>"Back to Request",
+        "ReceiptDate"=>"Receipt Date",
+        "GrandTotal"=>"Grand Total",
+        "PackagePrice"=>"Price",
+        "Subtotal"=>"Subtotal",
+        "ServicesTotal"=>"Services & Containers Total",
+        "ExpensesTotal"=>"Expenses Total",
+        "WeightTotal"=>"Weight Total",
+        "SenderDetails"=>"Sender Details",
+        "ReceiverDetails"=>"Receiver Details",
+        "ShippingDetails"=>"Shipping Details",
+        "ShipmentSummary"=>"Shipment Summary",
+        "CompanyReceiptFooter"=>"Thank you for choosing our services!",
+        "Signature"=>"Signature",
+        "DownloadPDF"=>"Download as PDF",
     ];

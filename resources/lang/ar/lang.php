@@ -384,4 +384,23 @@
         "ServiceSaved"=>"تم حفظ الخدمة بنجاح",
         "ServiceDeleted"=>"تم حذف الخدمة بنجاح",
         "SelectServiceToAdd"=>"اختر خدمة أو حاوية للإضافة",
+        
+        // Receipt Page
+        "Receipt"=>"إيصال شحن",
+        "PrintReceipt"=>"طباعة الإيصال",
+        "BackToRequest"=>"العودة للطلب",
+        "ReceiptDate"=>"تاريخ الإيصال",
+        "GrandTotal"=>"المجموع الكلي",
+        "PackagePrice"=>"السعر",
+        "Subtotal"=>"المجموع الفرعي",
+        "ServicesTotal"=>"إجمالي الخدمات والحاويات",
+        "ExpensesTotal"=>"إجمالي المصاريف",
+        "WeightTotal"=>"إجمالي الوزن",
+        "SenderDetails"=>"بيانات المرسل",
+        "ReceiverDetails"=>"بيانات المستلم",
+        "ShippingDetails"=>"بيانات الشحن",
+        "ShipmentSummary"=>"ملخص الشحنة",
+        "CompanyReceiptFooter"=>"شكرًا لاختياركم خدماتنا شريكًا لشحنكم!",
+        "Signature"=>"التوقيع",
+        "DownloadPDF"=>"تحميل كـ PDF",
     ];

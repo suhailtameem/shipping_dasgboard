@@ -159,6 +159,7 @@ Route::get('/deleteSubListItem/{id}', [Lists::class, 'deleteSubListItem']);
 Route::get('/{lang}/request-list', [requestsControllrt::class, 'requestList']);
 
 Route::get('/{lang}/request/{RID}', [requestsControllrt::class, 'showRequestDetails']);
+Route::get('/{lang}/request/{RID}/receipt', [requestsControllrt::class, 'showReceipt']);
 Route::get('/{lang}/create-request', [requestsControllrt::class, 'createRequest']);
 
 Route::controller(requestsControllrt::class)->group(function () {

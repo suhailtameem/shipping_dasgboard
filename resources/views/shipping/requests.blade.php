@@ -51,6 +51,9 @@
                 </div>
             </div>
             <div class="d-flex gap-2">
+                <a href="{{ url('/' . $lang . '/request/' . $shipment->id . '/receipt') }}" target="_blank" class="ios-btn ios-btn-secondary btn-sm">
+                    <i class="bi bi-printer"></i> @lang('lang.PrintReceipt')
+                </a>
                 <a class="ios-btn ios-btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#shippingLabelModal">
                     <i class="bi bi-qr-code-scan"></i> @lang('lang.PrintLabel')
                 </a>

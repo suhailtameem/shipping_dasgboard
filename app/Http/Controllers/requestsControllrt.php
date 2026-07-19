@@ -821,6 +821,89 @@ class requestsControllrt extends Controller
         return view('shipping.requests-admin', $data);
     }
 
+    public function showReceipt($lang, $RID)
+    {
+        // Set locale
+        $lang == 'Ar' ? App::setLocale('ar') : App::setLocale('en');
+
+        // Fetch shipment with all relationships
+        $shipment = ShippingRequest::with([
+            'customer.country',
+            'receiver.country',
+            'packages.packageType',
+            'expenses.expenseType',
+            'fromDest',
+            'toDest',
+            'shippingType',
+            'containerType',
+            'serviceType',
+            'status',
+            'shipmentServices',
+        ])->findOrFail($RID);
+
+        // Get active currency ID
+        $currencyId = $shipment->currency_id;
+        if (!$currencyId) {
+            $usd = Currency::where('currency', 'USD')->first();
+            $currencyId = $usd ? $usd->id : 1;
+        }
+
+        // Pre-calculate totals in order currency using CurrencyService
+        $contentsTotal = $this->currencyService->calculateOrderContentsTotal(
+            $shipment->packages,
+            $shipment->sh_type,
+            $shipment->from,
+            $shipment->to,
+            $currencyId
+        );
+
+        $totalServices = $this->currencyService->calculateOrderServicesTotal(
+            $shipment->shipmentServices,
+            $currencyId
+        );
+
+        $totalExpenses = $this->currencyService->calculateOrderExpensesTotal(
+            $shipment->expenses
+        );
+
+        $finalTotal = $this->currencyService->calculateFinalInvoice(
+            $shipment->packages,
+            $shipment->expenses,
+            $shipment->sh_type,
+            $shipment->from,
+            $shipment->to,
+            $currencyId,
+            $shipment->shipmentServices
+        );
+
+        $data = [
+            'lang'             => $lang,
+            'dir'              => $lang == 'Ar' ? 'rtl' : 'ltr',
+            'shipment'         => $shipment,
+            'packages'         => $shipment->packages,
+            'expenses'         => $shipment->expenses,
+            'shipmentServices' => $shipment->shipmentServices,
+            'currency'         => $shipment->orderCurrency->currency ?? 'USD',
+            'currencyId'       => $currencyId,
+            'currencyService'  => $this->currencyService,
+            'contentsTotal'    => $contentsTotal,
+            'totalServices'    => $totalServices,
+            'totalExpenses'    => $totalExpenses,
+            'finalTotal'       => $finalTotal,
+            'company'          => Company::first() ?? (object)[
+                'name_en' => 'Shipping Co.',
+                'name_ar' => 'شركة الشحن',
+                'email'   => 'info@shipping.com',
+                'phone'   => '+123456789',
+                'website' => 'www.shipping.com',
+                'logo'    => null,
+            ],
+            'shTypeInfo'       => $this->getshTypeInfo($shipment->sh_type),
+        ];
+
+        return view('shipping.receipt', $data);
+    }
+
     private function getCuidByGateway($gateway)
     {
         switch ($gateway) {
