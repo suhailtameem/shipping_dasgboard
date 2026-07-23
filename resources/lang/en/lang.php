@@ -35,6 +35,18 @@
         "Profile"=>"Profile",
         "Settings"=>"Settings",
         "Home"=>"Home",
+        "TodayActions"=>"Today's Movements",
+        "NoTodayMovements"=>"No movements today",
+        "Moved"=>"Moved",
+        "Status"=>"Status",
+        "Total"=>"Total",
+        "Today"=>"Today",
+        "ThisWeek"=>"This Week",
+        "LastMonth"=>"Last Month",
+        "ThisYear"=>"Year",
+        "AllTime"=>"All",
+        "Rates"=>"Rates",
+
 
         /*====================================
         ============ Air Freight ============
@@ -112,7 +124,22 @@
         "RequestStatus"=>"Request Status",
         "ItemName"=>"Item Name",
         "CreateRequest"=>"Create Request",
+        "CreateNewRequest"=>"Create New Request",
+        "CreateShippingRequest"=>"Create Shipping Request",
+        "FillDetailsBelow"=>"Fill in the details below",
+        "AdditionalServices"=>"Additional Services",
+        "SelectSubTypes"=>"Select Sub-types:",
+        "SelectSubServices"=>"Select Sub-services:",
         "Manage"=>"Manage",
+        "ErrSelectShippingType" => "Please select a shipping type.",
+        "ErrSelectContainerType" => "Please select at least one container type.",
+        "ErrSelectSubContainerType" => "Please select at least one sub-type for each selected container type.",
+        "ErrSelectSubServiceType" => "Please select at least one sub-service for each selected service.",
+        "TodayActions" => "Today's Movements",
+        "NoTodayMovements" => "No movements recorded for today",
+        "Moved" => "Moved",
+
+
 
         /*==================================== ============
         ============ Shipping Requests Content  ============

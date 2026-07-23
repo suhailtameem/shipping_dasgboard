@@ -36,6 +36,18 @@
         "Profile"=>"الملف الشخصي",
         "Settings"=>"الإعدادات",
         "Home"=>"الرئيسية",
+        "TodayActions"=>"تحركات اليوم",
+        "NoTodayMovements"=>"لا توجد تحركات اليوم",
+        "Moved"=>"تحرك",
+        "Status"=>"الحالة",
+        "Total"=>"الإجمالي",
+        "Today"=>"اليوم",
+        "ThisWeek"=>"هذا الأسبوع",
+        "LastMonth"=>"هذا الشهر",
+        "ThisYear"=>"هذا العام",
+        "AllTime"=>"الكل",
+        "Rates"=>"الأسعار",
+
 
         /*====================================
         ============ Air Freight ============
@@ -113,7 +125,22 @@
         "RequestStatus"=>"حالة الطلب",
         "ItemName"=>"اسم الصنف",
         "CreateRequest"=>"انشاء طلب",
+        "CreateNewRequest"=>"إنشاء طلب جديد",
+        "CreateShippingRequest"=>"إنشاء طلب شحن",
+        "FillDetailsBelow"=>"أدخل التفاصيل أدناه",
+        "AdditionalServices"=>"خدمات إضافية",
+        "SelectSubTypes"=>"اختر الأنواع الفرعية:",
+        "SelectSubServices"=>"اختر الخدمات الفرعية:",
         "Manage"=>"ادارة",
+        "ErrSelectShippingType" => "يرجى اختيار نوع الشحن.",
+        "ErrSelectContainerType" => "يرجى اختيار نوع حاوية واحد على الأقل.",
+        "ErrSelectSubContainerType" => "يرجى اختيار نوع فرعي واحد على الأقل لكل نوع حاوية تم تحديده.",
+        "ErrSelectSubServiceType" => "يرجى اختيار خدمة فرعية واحدة على الأقل لكل خدمة إضافية تم تحديدها.",
+        "TodayActions" => "تحركات اليوم",
+        "NoTodayMovements" => "لا توجد تحركات مسجلة اليوم",
+        "Moved" => "تم التحرك",
+
+
 
         /*==================================== ============
         ============ Shipping Requests Content  ============

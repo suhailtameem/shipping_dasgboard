@@ -5,14 +5,20 @@ if (!Session::has('user')) {
         ->send();
 }
 $current = request()->segment(count(request()->segments()));
+
+// Fetch company details
+$company = \App\Models\company::first();
+$coNameEn = $company ? $company->name_en : null;
+$coLogo = $company && $company->logo ? asset($company->logo) : asset('imgs/brand.png');
 @endphp
 
 <nav class="navbar navbar-expand-lg navbar-light px-4 fixed-top main-nav cc">
     <div class="container-fluid">
-        @if ($current != 'dashboard')
-            <a class="navbar-brand" href="{{ Request::server('HTTP_REFERER') }}">
-                <div class="backArrow">
-                    <i class="bi bi-arrow-left"></i>
+        @if (!empty($coNameEn))
+            <a class="navbar-brand fw-bold text-primary fs-6" href="{{ url('/' . request()->lang . '/dashboard') }}">
+                <div class="profileMenu px-3 py-2">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    {{ $coNameEn }}
                 </div>
             </a>
         @endif
@@ -35,7 +41,14 @@ $current = request()->segment(count(request()->segments()));
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item me-2">
+                    <a class="nav-link p-0" href="#" data-bs-toggle="modal" data-bs-target="#currencyCalcModal">
+                        <div class="profileMenu d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border-radius: 50%;">
+                            <i class="bi bi-calculator fs-5"></i>
+                        </div>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">
                         <div data-bs-toggle="offcanvas" data-bs-target="#profileCanvas" aria-controls="profileCanvas"
@@ -57,7 +70,7 @@ $current = request()->segment(count(request()->segments()));
 
 
 <aside class="aside">
-    <img src="{{ asset('imgs/brand.png') }}" width="50px" height="50px" class="aside-brand">
+    <img src="{{ $coLogo }}" width="50px" height="50px" class="aside-brand">
 
     <ul class="aside-list">
         <li>
@@ -188,3 +201,6 @@ $current = request()->segment(count(request()->segments()));
 
     </div>
 </div>
+
+<x-currency-calculator />
+

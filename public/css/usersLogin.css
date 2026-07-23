@@ -3,16 +3,36 @@ body{
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
+    animation-name: backGroundimageScalinginOut;
+    animation-duration: 20s;
+    animation-iteration-count: infinite;
 }
-
+@keyframes backGroundimageScalinginOut {
+    0%{
+        background-position: center;
+        background-size: 100%;
+    }
+    100%{
+        background-position: center;
+        background-size: 120%;
+    }
+}
 .cover{
     width: 100%;
     height: 100%;
     background-color: #48546100;
-    background-image: linear-gradient(315deg, #48546191 0%, #28313bc4 74%);
+
+    /* // gradiant from blue to dark from up left to bottom down (to top right) */
+    background: #242426;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom right, #0A2A88A6, #F08D049C);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom right, #0A2A88A6, #F08D049C);
+
 
     display: flex;
     flex-direction: column;
+
+    
+    
 }
 
 .Company {

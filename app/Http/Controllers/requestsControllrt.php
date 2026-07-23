@@ -206,6 +206,65 @@ class requestsControllrt extends Controller
 
     public function storeRequest(Request $request)
     {
+        $lang = $request->input('lang', 'En');
+        $lang == 'Ar' ? App::setLocale('ar') : App::setLocale('en');
+
+        // Validate Shipping Type (must select 1 only)
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'shippType' => 'required',
+        ], [
+            'shippType.required' => __('lang.ErrSelectShippingType'),
+        ]);
+
+        // Validate Container Type (at least 1 from main and 1 from sub if sub list exists)
+        $containerTypes = (array) $request->input('containerType', []);
+        $mainContainers = collect($containerTypes)->filter(function($val) {
+            return !is_numeric($val);
+        });
+
+        if ($mainContainers->isEmpty()) {
+            $validator->errors()->add('containerType', __('lang.ErrSelectContainerType'));
+        } else {
+            $selectedMainValues = $mainContainers->toArray();
+            $selectedMainRecords = ListModel::where('list_id', 3)->whereIn('value', $selectedMainValues)->get();
+            foreach ($selectedMainRecords as $record) {
+                if ($record->has_sub && $record->subLists->count() > 0) {
+                    $subIdsForRecord = subList::where('parent_id', $record->id)->pluck('id')->toArray();
+                    $selectedSubsForRecord = array_intersect($containerTypes, $subIdsForRecord);
+                    if (empty($selectedSubsForRecord)) {
+                        $validator->errors()->add('containerType', __('lang.ErrSelectSubContainerType'));
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Validate Services (optional, but if selected, sub-service is required)
+        $serviceTypes = (array) $request->input('serviceType', []);
+        $mainServices = collect($serviceTypes)->filter(function($val) {
+            return !is_numeric($val);
+        });
+
+        if (!$mainServices->isEmpty()) {
+            $selectedMainServiceValues = $mainServices->toArray();
+            $selectedMainServiceRecords = ListModel::where('list_id', 4)->whereIn('value', $selectedMainServiceValues)->get();
+            foreach ($selectedMainServiceRecords as $record) {
+                if ($record->has_sub && $record->subLists->count() > 0) {
+                    $subIdsForRecord = subList::where('parent_id', $record->id)->pluck('id')->toArray();
+                    $selectedSubsForRecord = array_intersect($serviceTypes, $subIdsForRecord);
+                    if (empty($selectedSubsForRecord)) {
+                        $validator->errors()->add('serviceType', __('lang.ErrSelectSubServiceType'));
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($validator->fails()) {
+            $this->Response($validator->errors()->first(), 'danger', 'web');
+            return redirect()->back()->withInput();
+        }
+
         $succ = 'Shipping Request Saved Successfully';
         $fi = 'Shipping Request Not Saved';
         $TNO = $this->GenTNO();

@@ -1,6 +1,18 @@
 @php
     $lang = request()->lang;
     $dir = $lang == "Ar"? "rtl" :"ltr";
+
+
+    use App\Models\company;
+
+    $company = company::first();
+    $coLogo        = $company && $company->logo        ? asset( $company->logo) : asset('imgs/brand.png');
+    $coName        = $company && ($lang == 'Ar' ? $company->name_ar        : $company->name_en)
+                        ? ($lang == 'Ar' ? $company->name_ar        : $company->name_en)
+                        : __('lang.CoTitle');
+    $coDescription = $company && ($lang == 'Ar' ? $company->description_ar : $company->description_en)
+                        ? ($lang == 'Ar' ? $company->description_ar : $company->description_en)
+                        : __('lang.CoSubtitle');
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -9,16 +21,16 @@
     <title>{{__('lang.loginTapTitle')}}</title>
     <link rel="stylesheet" href="{{asset('css/usersLogin.css')}}">
 </head>
-<body>
+<body style="background-image: url({{asset('imgs/login-page.jpg')}});">
     <div class="cover">
         <main class="container d-flex flex-column align-items-center justify-content-center h-100">
             <div class="row w-100 d-flex flex-row justify-content-center">
                 <div class="col-md-6 col-sm-12 d-flex justify-content-center mb-3">
                     <div class="Company">
-                        <img src="{{asset('imgs/brand.png')}}" class="brand" width="100px" height="100px">
-                        <h4 class="co-title">{{__('lang.CoTitle')}}</h4>
+                        <img src="{{ $coLogo }}" class="brand rounded-lg" width="100px" height="100px">
+                        <h4 class="co-title">{{ $coName }}</h4>
                         <small class="co-subtitle">
-                            {{__('lang.CoSubtitle')}}
+                            {{ $coDescription }}
                         </small>
                     </div>
                 </div>

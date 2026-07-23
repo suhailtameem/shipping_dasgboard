@@ -29,6 +29,17 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Route::get('/', function () {
+    $lang = request()->get('lang', 'En');
+    if ($lang == 'Ar' || $lang == 'ar') {
+        App::setLocale('ar');
+    } else {
+        App::setLocale('en');
+    }
+    return view('welcome');
+});
+
+Route::get('/{lang}/welcome', function ($lang) {
+    $ln = ($lang == 'Ar' || $lang == 'ar') ? App::setLocale('ar') : App::setLocale('en');
     return view('welcome');
 });
 
@@ -270,4 +281,44 @@ Route::get('/run-expenses-seeder', function () {
     Artisan::call('db:seed --class=ExpensesSeeder');
     return '<h2>ExpensesSeeder run successfully</h2>';
 });
+
+//=== Shipping Cost Calculator Endpoint ===
+Route::post('/calculate-shipping-cost', function (\Illuminate\Http\Request $request, \App\Services\CurrencyService $currencyService) {
+    $weight = (float) $request->input('weight', 250);
+    $shippingType = (string) $request->input('shipping_type', '1'); // 1=Air, 2=Sea, 3=Land
+    $from = (string) $request->input('from');
+    $to = (string) $request->input('to');
+    $currencyId = (int) $request->input('currency_id', 1);
+
+    // Call CurrencyService for cost calculation
+    $cost = $currencyService->calculateShippingCost($weight, $shippingType, $from, $to, $currencyId);
+
+    // Dynamic estimation fallback if DB rate ranges are not populated for selected route
+    if ($cost <= 0) {
+        $baseRatePerKg = 5.0; // Base USD/kg
+        if ($shippingType === '1') {
+            $baseRatePerKg = 10.5; // Air
+        } elseif ($shippingType === '2') {
+            $baseRatePerKg = 3.2; // Sea
+        } elseif ($shippingType === '3') {
+            $baseRatePerKg = 5.5; // Land
+        }
+        
+        $usdCost = max(45.0, $weight * $baseRatePerKg);
+        $cost = $currencyService->convertUsdToCurrency($usdCost, $currencyId);
+    }
+
+    $currency = \App\Models\currencies::find($currencyId);
+    $symbol = $currency ? ($currency->symbol ?? $currency->currency) : '$';
+    $code = $currency ? $currency->currency : 'USD';
+
+    return response()->json([
+        'success' => true,
+        'cost' => number_format($cost, 2),
+        'currency' => $code,
+        'symbol' => $symbol,
+        'formatted' => $symbol . ' ' . number_format($cost, 2)
+    ]);
+});
+
 

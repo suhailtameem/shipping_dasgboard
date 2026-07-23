@@ -15,4 +15,9 @@ class shMovements extends Model
         'details',
         'location',
     ];
+
+    public function shipment()
+    {
+        return $this->belongsTo(shipments::class, 'shid');
+    }
 }

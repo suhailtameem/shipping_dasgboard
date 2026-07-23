@@ -101,13 +101,88 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtns = document.querySelectorAll('#submitRequestBtn, #submitRequestBtnBottom');
     const form = document.getElementById('createRequestForm');
 
+    function showError(message) {
+        const alertBox = document.getElementById('validationAlert');
+        const msgSpan = document.getElementById('validationMsg');
+        if (alertBox && msgSpan) {
+            msgSpan.textContent = message;
+            alertBox.style.display = 'block';
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            alert(message);
+        }
+    }
+
+    function hideError() {
+        const alertBox = document.getElementById('validationAlert');
+        if (alertBox) {
+            alertBox.style.display = 'none';
+        }
+    }
+
+    if (form) {
+        form.addEventListener('change', hideError);
+    }
+
     submitBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // 1. Validate Shipping Type
+            const shippingType = document.querySelector('input[name="shippType"]:checked');
+            if (!shippingType) {
+                showError(data.translations.selectShippingType);
+                return;
+            }
+
+            // 2. Validate Container Type
+            const checkedContainers = document.querySelectorAll('.container-type-checkbox:checked');
+            if (checkedContainers.length === 0) {
+                showError(data.translations.selectContainerType);
+                return;
+            }
+
+            // Validate sub-containers for each selected container type
+            let containerSubValid = true;
+            checkedContainers.forEach(cb => {
+                const subListWrapper = document.getElementById('subList-' + cb.dataset.id);
+                if (subListWrapper) {
+                    const checkedSubs = subListWrapper.querySelectorAll('.sub-list-checkbox[name="subContainerType[]"]:checked');
+                    if (checkedSubs.length === 0) {
+                        containerSubValid = false;
+                    }
+                }
+            });
+            if (!containerSubValid) {
+                showError(data.translations.selectSubContainerType);
+                return;
+            }
+
+            // 3. Validate Service Type (Additional Services optional, but if selected, sub-service is required)
+            const checkedServices = document.querySelectorAll('.service-type-checkbox:checked');
+            let serviceSubValid = true;
+            checkedServices.forEach(cb => {
+                const subListWrapper = document.getElementById('serviceSubList-' + cb.dataset.id);
+                if (subListWrapper) {
+                    const checkedSubs = subListWrapper.querySelectorAll('.sub-list-checkbox[name="subServiceType[]"]:checked');
+                    if (checkedSubs.length === 0) {
+                        serviceSubValid = false;
+                    }
+                }
+            });
+            if (!serviceSubValid) {
+                showError(data.translations.selectSubServiceType);
+                return;
+            }
+
+            // Clear any alerts
+            hideError();
+
             // Remove any previously appended hidden inputs to avoid duplicates
             form.querySelectorAll('input.dynamic-selection').forEach(el => el.remove());
 
-            // Collect ALL checked container type sub-list IDs
-            document.querySelectorAll('.container-type-checkbox:checked').forEach(cb => {
+            // Collect ALL checked container type values
+            checkedContainers.forEach(cb => {
                 const hidden = document.createElement('input');
                 hidden.type  = 'hidden';
                 hidden.name  = 'containerType[]';
@@ -117,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             // Collect ALL checked sub-container type IDs
-            document.querySelectorAll('.sub-list-checkbox:checked').forEach(cb => {
+            document.querySelectorAll('.sub-list-checkbox[name="subContainerType[]"]:checked').forEach(cb => {
                 const hidden = document.createElement('input');
                 hidden.type  = 'hidden';
                 hidden.name  = 'containerType[]';
@@ -126,8 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 form.appendChild(hidden);
             });
 
-            // Collect ALL checked service type sub-list IDs
-            document.querySelectorAll('.service-type-checkbox:checked').forEach(cb => {
+            // Collect ALL checked service type values
+            checkedServices.forEach(cb => {
                 const hidden = document.createElement('input');
                 hidden.type  = 'hidden';
                 hidden.name  = 'serviceType[]';

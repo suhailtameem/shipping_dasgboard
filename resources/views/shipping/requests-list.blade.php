@@ -33,18 +33,18 @@
 
                     <a
                         href="{{url('/' . $lang . '/create-request')}}"
-                        class="links btn btn-sm btn-primary text-light float-end eq-btn">
+                        class="links btn btn-sm btn-primary text-light float-end eq-btn ms-2">
                         <i class="bi bi-plus-circle mx-1"></i>
-                        New Request (Design)
+                        @lang('lang.NewShipping')
                     </a>
                     
-                    <button
+                    <!-- <button
                         data-bs-toggle="modal"
                         data-bs-target="#NSHR"
                         class="links btn btn-sm btn-secondary text-light float-end eq-btn ms-2">
                         <i class="bi bi-plus-circle-dotted mx-1"></i>
                         @lang('lang.NewShipping')
-                    </button>
+                    </button> -->
 
                     <button
                         data-bs-toggle="modal"

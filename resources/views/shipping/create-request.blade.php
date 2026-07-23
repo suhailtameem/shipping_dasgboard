@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     @include('links')
-    <title>Create Shipping Request</title>
+    <title>@lang('lang.CreateShippingRequest')</title>
     <link rel="stylesheet" href="{{ asset('css/request-details.css') }}">
     <link rel="stylesheet" href="{{ asset('css/create-request.css') }}">
 </head>
@@ -13,22 +13,35 @@
         <div class="ios-header">
             <div class="d-flex align-items-center">
                 <a href="{{url('/' . $lang . '/request-list')}}" class="text-primary me-3 f20">
-                    <i class="bi bi-chevron-left"></i>
+                    <div class="backArrow ms-4 text-dark">
+                        @if($dir == "ltr")
+                        <i class="bi bi-arrow-left"></i>
+                        @else
+                        <i class="bi bi-arrow-right"></i>
+                        @endif
+                    </div>
                 </a>
                 <div>
-                    <h1 class="ios-title">Create New Request</h1>
-                    <div class="text-muted small">Fill in the details below</div>
+                    <h1 class="ios-title">@lang('lang.CreateNewRequest')</h1>
+                    <div class="text-muted small">@lang('lang.FillDetailsBelow')</div>
                 </div>
             </div>
             <div class="d-flex gap-2">
                 <button id="submitRequestBtn" class="ios-btn btn-sm">
-                    <i class="bi bi-check-circle me-1"></i> Save
+                    <i class="bi bi-check-circle me-1"></i> @lang('lang.Save')
                 </button>
             </div>
         </div>
 
         <form id="createRequestForm" action="{{ url('/newShipment') }}" method="post">
             @csrf
+            <!-- Validation Alert -->
+            <div id="validationAlert" class="alert alert-danger mb-4" style="display: none; border-radius: 16px;">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2" style="font-size: 20px;"></i>
+                    <span id="validationMsg"></span>
+                </div>
+            </div>
             <input type="hidden" name="getway" value="1" title="admin">
             <input type="hidden" name="getwayType" value="1" title="web">
             <input type="hidden" name="cuid" value="{{ Session::get('user')->id ?? 1 }}">
@@ -42,14 +55,14 @@
                         <div class="ios-group-header bg-soft-primary">
                             <div class="step-number">1</div>
                             <i class="bi bi-truck me-2"></i>
-                            Shipping Type
+                            @lang('lang.ShippingType') <span class="text-danger ms-1">*</span>
                         </div>
                         <div class="p-4">
                             <div class="row g-3 shipping-types-grid">
                                 @foreach($shippingTypes as $type)
                                 <div class="col-md-4 col-6">
                                     <label class="shipping-type-card">
-                                        <input type="radio" name="shippType" value="{{ $type->value }}" class="shipping-type-radio d-none" data-type="{{ $type->value }}" @if($loop->first) checked @endif>
+                                        <input type="radio" name="shippType" value="{{ $type->value }}" class="shipping-type-radio d-none" data-type="{{ $type->value }}">
                                         <div class="shipping-type-inner">
                                             <div class="shipping-type-icon">
                                                 <img src="{{ $type->imgUrl ?? asset('imgs/box_def.jpg') }}" alt="{{ $lang == 'Ar' ? $type->ar : $type->en }}">
@@ -74,14 +87,14 @@
                         <div class="ios-group-header bg-soft-warning">
                             <div class="step-number">2</div>
                             <i class="bi bi-geo-alt-fill me-2"></i>
-                            Destinations
+                            @lang('lang.Destinations')
                         </div>
                         <div class="p-4 n">
                             <div class="destinations-wrapper d-flex flex-colum">
                                 <div class="destination-card">
                                     <div class="dest-label">
                                         <i class="bi bi-arrow-up-circle-fill text-success"></i>
-                                        From
+                                        @lang('lang.From')
                                     </div>
                                     <select name="fromCountry" id="fromCountry" class="form-select form-select-lg">
                                         <!-- Populated by JS -->
@@ -91,7 +104,7 @@
                                 <div class="destination-card">
                                     <div class="dest-label">
                                         <i class="bi bi-arrow-down-circle-fill text-primary"></i>
-                                        To
+                                        @lang('lang.To')
                                     </div>
                                     <select name="toCountry" id="toCountry" class="form-select form-select-lg">
                                         <!-- Populated by JS -->
@@ -108,7 +121,7 @@
                 <div class="ios-group-header bg-soft-success">
                     <div class="step-number">3</div>
                     <i class="bi bi-box-seam me-2"></i>
-                    Container Type
+                    @lang('lang.ContainerType') <span class="text-danger ms-1">*</span>
                 </div>
                 <div class="p-4">
                     <div class="container-types-wrapper">
@@ -123,15 +136,15 @@
                                     <div class="container-type-name">
                                         {{ $lang == 'Ar' ? $type->ar : $type->en }}
                                     </div>
-                                    <div class="check-indicator">
-                                        <i class="bi bi-check2-square"></i>
+                                    <div class="check-indicator @if($lang == 'Ar') check-indecator-ar @endif">
+                                        <i class="bi bi-check-circle-fill"></i>
                                     </div>
                                 </div>
                             </label>
 
                             @if($type->has_sub && $type->subLists->count() > 0)
                             <div class="sub-lists-wrapper mt-4" id="subList-{{ $type->id }}" style="display: none;">
-                                <div class="sub-lists-label">Select Sub-types:</div>
+                                <div class="sub-lists-label">@lang('lang.SelectSubTypes')</div>
                                 <div class="row g-3 ms-3">
                                     @foreach($type->subLists as $sub)
                                     <div class="col-md-3 col-6">
@@ -165,7 +178,7 @@
                 <div class="ios-group-header bg-soft-secondary">
                     <div class="step-number">4</div>
                     <i class="bi bi-gear-fill me-2"></i>
-                    Additional Services
+                    @lang('lang.AdditionalServices')
                 </div>
                 <div class="p-4">
                     <div class="services-wrapper">
@@ -181,14 +194,14 @@
                                         {{ $lang == 'Ar' ? $type->ar : $type->en }}
                                     </div>
                                     <div class="check-indicator">
-                                        <i class="bi bi-check2-square"></i>
+                                        <i class="bi bi-check-circle-fill"></i>
                                     </div>
                                 </div>
                             </label>
 
                             @if($type->has_sub && $type->subLists->count() > 0)
                             <div class="sub-lists-wrapper mt-4" id="serviceSubList-{{ $type->id }}" style="display: none;">
-                                <div class="sub-lists-label">Select Sub-services:</div>
+                                <div class="sub-lists-label">@lang('lang.SelectSubServices')</div>
                                 <div class="row g-3 ms-3">
                                     @foreach($type->subLists as $sub)
                                     <div class="col-md-3 col-6">
@@ -219,15 +232,15 @@
         </form>
 
         <!-- Fixed Bottom Action Bar -->
-        <div class="fixed-bottom p-3 py-1 totals-footer" dir="{{$dir}}">
-            <div class="ios-container py-0">
-                <div class="d-flex justify-content-center">
-                    <button id="submitRequestBtnBottom" class="ios-btn px-5 py-2 btn-lg">
-                        <i class="bi bi-check-circle me-2"></i> Create Shipping Request
-                    </button>
-                </div>
+        
+        <div class="ios-container py-0 mt-4">
+            <div class="d-flex justify-content-start align-items-center">
+                <button id="submitRequestBtnBottom" class="ios-btn px-5 py-2 btn-lg mb-3">
+                    <i class="bi bi-check-circle me-2"></i> @lang('lang.CreateShippingRequest')
+                </button>
             </div>
         </div>
+        
     </div>
 
     <!-- Data for JS -->
@@ -237,8 +250,15 @@
             airDests: @json($airDests),
             seaDests: @json($seaDests),
             landDests: @json($landDests),
+            translations: {
+                selectShippingType: "@lang('lang.ErrSelectShippingType')",
+                selectContainerType: "@lang('lang.ErrSelectContainerType')",
+                selectSubContainerType: "@lang('lang.ErrSelectSubContainerType')",
+                selectSubServiceType: "@lang('lang.ErrSelectSubServiceType')"
+            }
         };
     </script>
+    @include('scripts')
     <script src="{{ asset('js/create-request.js') }}"></script>
 </body>
 </html>
