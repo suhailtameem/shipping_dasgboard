@@ -79,8 +79,8 @@
                     <li><a href="#calculator">{{ __('landing.nav.calculator') }}</a></li>
                     <li><a href="#tracking">{{ __('landing.nav.tracking') }}</a></li>
                     <li><a href="#features">{{ __('landing.nav.features') }}</a></li>
-                    <li><a href="#fleet">{{ __('landing.nav.fleet') }}</a></li>
-                    <li><a href="#faq">{{ __('landing.nav.faq') }}</a></li>
+                    {{-- <li><a href="#fleet">{{ __('landing.nav.fleet') }}</a></li>
+                    <li><a href="#faq">{{ __('landing.nav.faq') }}</a></li> --}}
                 </ul>
 
                 <!-- Nav Actions -->
@@ -460,77 +460,7 @@
                 <p class="section-subtitle">{{ __('landing.tracking.subtitle') }}</p>
             </div>
 
-            <div class="tracking-map-wrapper">
-                <!-- Search Input Bar -->
-                <div class="tracking-search-bar">
-                    <input type="text" class="tracking-input" id="inputTrackNumber" value="NEX-8894021-SA" placeholder="{{ __('landing.tracking.placeholder') }}">
-                    <button class="btn-prime" id="btnTrackSearch">
-                        <i class="bi bi-search"></i> {{ __('landing.tracking.btn') }}
-                    </button>
-                </div>
-
-                <!-- Status Header -->
-                <div style="text-align: center; margin-bottom: 32px;">
-                    <span id="trackStatusText" style="font-size: 18px; font-weight: 700; color: var(--accent-green);">
-                        {{ __('landing.tracking.status_active') }}
-                    </span>
-                </div>
-
-                <!-- Full Stepper Timeline -->
-                <div class="tracking-stepper-full">
-                    <div class="tracking-progress-fill" id="trackingProgressFill"></div>
-
-                    <div class="stepper-node completed">
-                        <div class="node-dot"><i class="bi bi-box"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_received') }}</div>
-                    </div>
-
-                    <div class="stepper-node completed">
-                        <div class="node-dot"><i class="bi bi-warehouse"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_processing') }}</div>
-                    </div>
-
-                    <div class="stepper-node completed">
-                        <div class="node-dot"><i class="bi bi-shield-check"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_customs') }}</div>
-                    </div>
-
-                    <div class="stepper-node active">
-                        <div class="node-dot"><i class="bi bi-airplane"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_transit') }}</div>
-                    </div>
-
-                    <div class="stepper-node">
-                        <div class="node-dot"><i class="bi bi-building-check"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_arrived') }}</div>
-                    </div>
-
-                    <div class="stepper-node">
-                        <div class="node-dot"><i class="bi bi-truck"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_delivery') }}</div>
-                    </div>
-
-                    <div class="stepper-node">
-                        <div class="node-dot"><i class="bi bi-check-circle"></i></div>
-                        <div class="node-label">{{ __('landing.tracking.step_delivered') }}</div>
-                    </div>
-                </div>
-
-                <!-- Map Canvas Representation -->
-                <div class="map-canvas-container">
-                    <svg width="100%" height="100%" viewBox="0 0 1000 320" preserveAspectRatio="none" style="position: absolute; inset: 0;">
-                        <!-- SVG World Map Graphic Grid Lines -->
-                        <path d="M 100 100 Q 300 20 600 120 T 900 80" stroke="rgba(0, 113, 227, 0.4)" stroke-width="3" fill="none" stroke-dasharray="6,6"/>
-                        <circle cx="100" cy="100" r="8" fill="#0071E3"/>
-                        <circle cx="600" cy="120" r="10" fill="#FF9500" style="animation: pulse 1.5s infinite;"/>
-                        <circle cx="900" cy="80" r="8" fill="#34C759"/>
-
-                        <text x="90" y="130" fill="#1D1D1F" font-size="13" font-weight="700">{{ __('landing.tracking.origin_loc') }}</text>
-                        <text x="570" y="155" fill="#FF9500" font-size="14" font-weight="800">{{ __('landing.tracking.current_loc') }}</text>
-                        <text x="860" y="110" fill="#1D1D1F" font-size="13" font-weight="700">{{ __('landing.tracking.dest_loc') }}</text>
-                    </svg>
-                </div>
-            </div>
+            <x-tracking-shipments />
         </div>
     </section>
 

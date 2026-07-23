@@ -225,59 +225,17 @@ document.addEventListener('DOMContentLoaded', function () {
         weightInput.addEventListener('input', doCalculateShipping);
     }
 
-    /* ── Interactive Shipment Tracking Simulation ── */
+    /* ── Interactive Shipment Tracking ── */
+    const trackingForm = document.getElementById('trackingForm');
     const trackBtn = document.getElementById('btnTrackSearch');
     const trackInput = document.getElementById('inputTrackNumber');
-    const trackResultDisplay = document.getElementById('trackStatusText');
-    const progressFill = document.getElementById('trackingProgressFill');
-    const stepperNodes = document.querySelectorAll('.stepper-node');
 
-    if (trackBtn && trackInput) {
-        trackBtn.addEventListener('click', performTrackSearch);
-        trackInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                performTrackSearch();
+    if (trackingForm) {
+        trackingForm.addEventListener('submit', function () {
+            if (trackBtn) {
+                trackBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Searching...';
             }
         });
-    }
-
-    function performTrackSearch() {
-        const val = trackInput.value.trim();
-        if (!val) return;
-
-        // Visual feedback
-        trackBtn.innerText = 'Searching...';
-        
-        setTimeout(() => {
-            trackBtn.innerHTML = '<i class="bi bi-search me-1"></i> Track';
-
-            // Randomize active step state for demonstration
-            const randomStep = Math.floor(Math.random() * 4) + 1; // steps 1 to 4
-            const percentages = [20, 45, 75, 100];
-
-            if (progressFill) {
-                progressFill.style.width = percentages[randomStep - 1] + '%';
-            }
-
-            stepperNodes.forEach((node, index) => {
-                node.classList.remove('completed', 'active');
-                if (index < randomStep - 1) {
-                    node.classList.add('completed');
-                } else if (index === randomStep - 1) {
-                    node.classList.add('active');
-                }
-            });
-
-            if (trackResultDisplay) {
-                const statuses = [
-                    'Warehouse Processing (Frankfurt HUB)',
-                    'Customs Clearance Passed (Jeddah Port)',
-                    'In Transit via Air Cargo FL-882',
-                    'Out for Delivery - Driver Assigned'
-                ];
-                trackResultDisplay.innerText = `Status for #${val}: ` + statuses[randomStep - 1];
-            }
-        }, 600);
     }
 
     /* ── FAQ Accordion Toggle ── */
